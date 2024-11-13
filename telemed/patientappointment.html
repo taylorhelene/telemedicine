@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Page</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic styles for appointment cards */
+        .appointment-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            background-color: #f9f9f9;
+            transition: box-shadow 0.3s;
+        }
+        .appointment-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .appointment-details {
+            margin-bottom: 10px;
+        }
+        .cancel-btn {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cancel-btn:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            
+            <h1>Book an Appointment</h1> 
+            
+            <form id="appointmentForm">
+                <label for="doctorId">Select Doctor</label>
+                <select id="doctorId" name="doctorId" required>
+                    <option value="">--Select a Doctor--</option>
+                    <!-- Options will be populated here -->
+                </select>
+                
+                <label for="appointmentDate">Date</label>
+                <input type="date" id="appointmentDate" name="appointmentDate" required>
+                
+                <label for="appointmentTime">Time</label>
+                <input type="time" id="appointmentTime" name="appointmentTime" required>
+
+                <button type="submit" class="btn">Book Appointment</button>
+            </form>
+            
+        </section>
+
+        <section class="patient-appointments">
+            <h1>Your Appointments</h1>
+            <div id="appointmentsList">
+                <!-- Appointments will be populated here dynamically -->
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Check if user is authenticated
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('You need to log in first.');
+                window.location.href = 'patientlogin.html'; // Redirect to login page
+            }
+
+            const userId = user.id; // Assuming the user ID is stored in local storage
+
+            // Fetch and populate doctors
+            await fetchDoctors();
+
+            // Fetch user appointments
+            await fetchUserAppointments(userId);
+
+            // Handle appointment booking
+            document.getElementById('appointmentForm').addEventListener('submit', async function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                const doctorId = document.getElementById('doctorId').value;
+                const appointmentDate = document.getElementById('appointmentDate').value;
+                const appointmentTime = document.getElementById('appointmentTime').value;
+
+                const appointmentData = {
+                    patient_id: userId,
+                    doctor_id: doctorId,
+                    appointment_date: appointmentDate,
+                    appointment_time: appointmentTime
+                };
+
+                try {
+                    const response = await fetch('http://localhost:3000/appointments', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(appointmentData)
+                    });
+
+                    if (response.ok) {
+                        alert('Appointment booked successfully!');
+                        // Refresh the appointments list
+                        await fetchUserAppointments(userId);
+                    } else {
+                        const data = await response.json();
+                        alert('Error booking appointment: ' + data.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                }
+            });
+        });
+
+        async function fetchDoctors() {
+            try {
+                const response = await fetch('http://localhost:3000/doctors');
+                const doctors = await response.json();
+                const doctorSelect = document.getElementById('doctorId');
+
+                // Populate the dropdown with doctor options
+                doctors.forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor.id; // Assuming each doctor has an 'id' field
+                    option.textContent = `${doctor.first_name} ${doctor.last_name} (${doctor.specialization}) (${doctor.schedule})`; // Customize as needed
+                    doctorSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching doctors:', error);
+                alert('An error occurred while fetching doctors. Please try again later.');
+            }
+        }
+
+        async function fetchUserAppointments(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/appointments?patient_id=${userId}`);
+                const appointments = await response.json();
+                const appointmentsList = document.getElementById('appointmentsList');
+
+                appointmentsList.innerHTML = ''; // Clear previous appointments
+
+                if (appointments.length === 0) {
+                    appointmentsList.innerHTML = '<p>No appointments found.</p>';
+                    return;
+                }
+
+                appointments.forEach(appointment => {
+                    const appointmentCard = document.createElement('div');
+                    appointmentCard.classList.add('appointment-card');
+
+                    appointmentCard.innerHTML = `
+                        <div class="appointment-details">
+                            <p><strong>Doctor ID:</strong> ${appointment.doctor_id}</p>
+                            <p><strong>Date:</strong> ${appointment.appointment_date}</p>
+                            <p><strong>Time:</strong> ${appointment.appointment_time}</p>
+                            <p><strong>Status:</strong> ${appointment.status}</p>
+                        </div>
+                    `;
+
+                    // Add cancel button only if the status is not 'canceled'
+                    if (appointment.status !== 'canceled') {
+                        const cancelButton = document.createElement('button');
+                        cancelButton.classList.add('cancel-btn');
+                        cancelButton.setAttribute('data-id', appointment.id);
+                        cancelButton.textContent = 'Cancel Appointment';
+                        cancelButton.addEventListener('click', async function () {
+                            const appointmentId = this.getAttribute('data-id');
+                            await cancelAppointment(appointmentId, userId);
+                        });
+                        appointmentCard.appendChild(cancelButton);
+                    } else {
+                        // If the appointment is canceled, show a message
+                        const canceledMessage = document.createElement('p');
+                        canceledMessage.textContent = 'This appointment has been canceled.';
+                        appointmentCard.appendChild(canceledMessage);
+                    }
+
+                    appointmentsList.appendChild(appointmentCard);
+                });
+
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                document.getElementById('appointmentsList').innerHTML = '<p>Error fetching appointments. Please try again later.</p>';
+            }
+        }
+
+        async function cancelAppointment(appointmentId, patientId) {
+            try {
+                const response = await fetch(`http://localhost:3000/appointments/${appointmentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ patient_id: patientId }) // Send patient ID for validation
+                });
+
+                if (response.ok) {
+                    alert('Appointment canceled successfully!');
+                    location.reload(); // Refresh the page to update the list
+                } else {
+                    const data = await response.json();
+                    alert('Error canceling appointment: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        }
+        
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            <h1>Welcome, Doctor</h1>
+
+            <form id="doctorDetailsForm">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" readonly>
+        
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" readonly>
+        
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" readonly>
+        
+                <label for="specialization">Specialization</label>
+                <input type="text" id="specialization" name="specialization" readonly>
+
+                <label for="schedule">Schedule</label>
+                <input type="text" id="schedule" name="schedule" readonly>
+            </form>
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a href="doctoredit.html" class="btn">Edit profile</a>
+                    <a href="" class="btn" id="logoutBtn">Logout</a>
+                </div>
+            </section>
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a class="btn" href="doctorappointment.html" >Appointments</a>
+                    <a class="btn" id="deleteAccountBtn">Delete account</a>
+                </div>
+            </section>
+            
+        </section>
+    </main>
+
+    <script>
+         // Fetch and display doctor details from localStorage
+         document.addEventListener('DOMContentLoaded', () => {
+            const doctorId = localStorage.getItem('doctorId');
+
+            if (!doctorId) {
+                alert('You are not logged in. Redirecting to login...');
+                window.location.href = 'doctorlogin.html'; // Redirect to login if not logged in
+                return;
+            }
+
+            // Populate fields with the stored doctor data
+            document.getElementById('firstname').value = localStorage.getItem('doctorFirstName');
+            document.getElementById('lastname').value = localStorage.getItem('doctorLastName');
+            document.getElementById('phone').value = localStorage.getItem('doctorPhone');
+            document.getElementById('specialization').value = localStorage.getItem('doctorSpecialization');
+            document.getElementById('schedule').value = localStorage.getItem('doctorSchedule');
+        });
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('doctorId'); // Clear the session on logout
+            localStorage.removeItem('doctorFirstName');
+            localStorage.removeItem('doctorLastName');
+            localStorage.removeItem('doctorPhone');
+            localStorage.removeItem('doctorSpecialization');
+            localStorage.removeItem('doctorSchedule');
+            window.location.href = 'doctorlogin.html'; // Redirect to login page
+        });
+
+        // Delete Account Functionality
+        document.getElementById('deleteAccountBtn').addEventListener('click', async (e) => {
+            e.preventDefault(); // Prevent the default action
+
+            const confirmDeletion = confirm('Are you sure you want to delete your account?');
+            if (confirmDeletion) {
+                const doctorId = localStorage.getItem('doctorId');
+                const response = await fetch(`http://localhost:3000/doctor/delete`, { method: 'DELETE' });
+                
+                if (response.ok) {
+                    alert('Account deleted successfully.');
+                    // Clear localStorage and redirect to signup page
+                    localStorage.clear();
+                    window.location.href = 'home.html';
+                } else {
+                    alert('Failed to delete account.');
+                }
+            }
+        });
+    </script>
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+   
+
+</body>
+</html>

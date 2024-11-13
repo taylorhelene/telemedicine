@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="doctor-login">
+            <h1>Admin Login</h1>
+            <form action="#" method="post" id="adminLoginForm">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <p id="loginMessage"></p> <!-- To show success or error messages -->
+
+        </section>
+    </main>
+
+    <script>
+        // Handle form submission with fetch
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form default behavior
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Construct the request body
+            const requestBody = {
+                username: username,
+                password: password
+            };
+
+            try {
+                // Send a POST request to the backend
+                const response = await fetch('http://localhost:3000/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Save admin details (like username and role) to local storage
+                    localStorage.setItem('adminUsername', result.username); // From server response
+                    localStorage.setItem('adminRole', result.role); // From server response
+                    console.log(result,localStorage)
+                    // Redirect to the admin dashboard or show success message
+                    document.getElementById('loginMessage').textContent = "Login successful!";
+                    window.location.href = 'admindashboard.html'; // Redirect to admin dashboard
+                } else {
+                    // Display error message
+                    document.getElementById('loginMessage').textContent = `Error: ${result.message}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loginMessage').textContent = 'Login failed. Please try again.';
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

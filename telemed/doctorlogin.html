@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="doctor-login">
+            <h1>Doctor Login</h1>
+            <form action="#" method="post" id="doctor-login-form">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="number" id="number" name="number" required>
+
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Check if the doctor is already logged in
+        if (localStorage.getItem('doctorId')) {
+            // Redirect to profile if logged in
+            window.location.href = 'doctordashboard.html';
+        }
+
+        document.getElementById('doctor-login-form').addEventListener('submit', async function (e) {
+            e.preventDefault();  // Prevent traditional form submission
+
+            const formData = new FormData(this);
+            const data = {
+                email: formData.get('email'),
+                phone: formData.get('number')
+            };
+
+            try {
+                // Send POST request to login
+                const response = await fetch('http://localhost:3000/doctor/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Save session info (doctor ID) to localStorage
+                      // Store doctorId and other details in localStorage
+                    localStorage.setItem('doctorId', result.doctorId);  // Save doctor ID to localStorage for session persistence
+                    localStorage.setItem('doctorFirstName', result.firstName);
+                    localStorage.setItem('doctorLastName', result.lastName);
+                    localStorage.setItem('doctorPhone', result.phone);
+                    localStorage.setItem('doctorSpecialization', result.specialization);
+                    localStorage.setItem('doctorSchedule', result.schedule);
+                    console.log(localStorage,result)
+                    alert(result.message);
+                    window.location.href = 'doctordashboard.html';  // Redirect to profile
+                } else {
+                    alert(result.message);  // Show error message
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

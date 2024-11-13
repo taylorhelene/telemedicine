@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            <h1>Welcome, Admin</h1>
+
+            <form id="adminForm">
+                <label for="username">UserName</label>
+                <input type="text" id="username" name="username" readonly>
+        
+                <label for="role">Role</label>
+                <input type="text" id="role" name="role" readonly>
+            </form>
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a href="adminedit.html" class="btn">Edit profile</a>
+                    <a href="" class="btn" id="logoutBtn">Logout</a>
+                </div>
+            </section>
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a href="doctorlist.html" class="btn">View Doctors</a>
+                    <a href="appointmentslist.html" class="btn">View Appointments</a>
+
+                </div>
+            </section>
+            <section class="patient-welcome">
+            <div class="buttons">
+                <a class="btn" id="deleteAccountBtn">Delete account</a>
+            </div>
+        </section>
+            
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Fill admin details from local storage
+        window.onload = function() {
+            const adminUsername = localStorage.getItem('adminUsername');
+            const adminRole = localStorage.getItem('adminRole');
+
+            if (adminUsername && adminRole) {
+                document.getElementById('username').value = adminUsername;
+                document.getElementById('role').value = adminRole;
+            } else {
+                alert("No admin details found. Please log in.");
+                window.location.href = 'adminlogin.html'; // Redirect to login if no admin details are found
+            }
+        };
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            localStorage.removeItem('adminUsername');
+            localStorage.removeItem('adminRole');
+            window.location.href = 'adminlogin.html'; // Redirect to login page after logout
+        });
+
+        // Delete account functionality
+        document.getElementById('deleteAccountBtn').addEventListener('click', async function(event) {
+            event.preventDefault();
+
+            const adminUsername = localStorage.getItem('adminUsername');
+
+            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                try {
+                    const response = await fetch(`http://localhost:3000/admin/${adminUsername}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Clear local storage and redirect to home page after successful deletion
+                        localStorage.removeItem('adminUsername');
+                        localStorage.removeItem('adminRole');
+                        alert('Account deleted successfully.');
+                        window.location.href = 'home.html'; // Redirect to home page
+                    } else {
+                        alert('Error deleting account. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to delete account. Please try again.');
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

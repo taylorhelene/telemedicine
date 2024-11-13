@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            <h1>Appointments</h1>
+
+            <section id="appointmentsSection">
+                <h2>Your Appointments</h2>
+                <ul id="appointmentsList"></ul>
+            </section>
+
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a href="doctoredit.html" class="btn">Edit profile</a>
+                    <a href="" class="btn" id="logoutBtn">Logout</a>
+                </div>
+            </section>
+            
+            
+        </section>
+    </main>
+
+    <script>
+        async function fetchAppointments() {
+            const doctorId = localStorage.getItem('doctorId'); // Get the logged-in doctor's ID
+
+            if (!doctorId) {
+                alert('You must be logged in to access this page.');
+                window.location.href = 'doctorlogin.html'; // Redirect if not logged in
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/appointments/${doctorId}`);
+                const appointments = await response.json();
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch appointments: ' + appointments.message);
+                }
+
+                const appointmentsList = document.getElementById('appointmentsList');
+                appointmentsList.innerHTML = ''; // Clear the list before adding new items
+
+                // Populate the appointments list
+                appointments.forEach(appointment => {
+                    const li = document.createElement('li');
+                    li.textContent = `Appointment with Patient: ${appointment.patient_first_name} ${appointment.patient_last_name} on ${appointment.appointment_date} at ${appointment.appointment_time} (Status: ${appointment.status})`;
+                    appointmentsList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                alert('Failed to load appointments. Please try again later.');
+            }
+        }
+
+        // Call the function to fetch appointments when the page loads
+        window.onload = fetchAppointments;
+
+         // Logout Functionality
+         document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('doctorId'); // Clear the session on logout
+            localStorage.removeItem('doctorFirstName');
+            localStorage.removeItem('doctorLastName');
+            localStorage.removeItem('doctorPhone');
+            localStorage.removeItem('doctorSpecialization');
+            localStorage.removeItem('doctorSchedule');
+            window.location.href = 'doctorlogin.html'; // Redirect to login page
+        });
+
+        // Delete Account Functionality
+        document.getElementById('deleteAccountBtn').addEventListener('click', async (e) => {
+            e.preventDefault(); // Prevent the default action
+
+            const confirmDeletion = confirm('Are you sure you want to delete your account?');
+            if (confirmDeletion) {
+                const doctorId = localStorage.getItem('doctorId');
+                const response = await fetch(`http://localhost:3000/doctor/delete`, { method: 'DELETE' });
+                
+                if (response.ok) {
+                    alert('Account deleted successfully.');
+                    // Clear localStorage and redirect to signup page
+                    localStorage.clear();
+                    window.location.href = 'home.html';
+                } else {
+                    alert('Failed to delete account.');
+                }
+            }
+        });
+    </script>
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+   
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: teal;
+    padding: 30px 0;  /* Increase padding to make the nav taller */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-navbar,
+.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.left-navbar li {
+    margin-left: 20px;
+}
+
+.left-navbar a,
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;  /* Increase font size */
+    padding: 12px 20px;  /* Increase padding for larger clickable area */
+}
+
+.navbar {
+    margin-right: 20px;
+}
+
+.navbar li {
+    margin: 0 1px;
+}
+
+.navbar a:hover,
+.left-navbar a:hover {
+    background-color: #011124;
+    border-radius: 5px;
+}
+
+main {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.welcome h1 {
+    color: #333;
+}
+
+.welcome p {
+    color: #666;
+    font-size: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: teal;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+
+/* Admin.html section /
+
+/* Admin Welcome Section */
+.admin-welcome {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.admin-welcome h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.admin-welcome .buttons {
+    margin-top: 20px;
+}
+
+.admin-welcome .btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 18px;
+}
+
+.admin-welcome .btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+/* doctor.html*/
+
+/* Doctor Welcome Section */
+.doctor-welcome {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.doctor-welcome h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 18px;
+}
+
+.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+/* patient.html */
+
+.patient-welcome {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.patient-welcome h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 18px;
+}
+
+.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+
+/* adminsignup.html*/
+
+/* Admin Signup Form */
+.admin-signup {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.admin-signup h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.admin-signup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-signup label {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.admin-signup input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.admin-signup button.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.admin-signup button.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+/*doctorsignup.html*/
+
+/* Doctor Signup Form */
+.doctor-signup {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.doctor-signup h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.doctor-signup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.doctor-signup label {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.doctor-signup input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.doctor-signup button.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.doctor-signup button.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+/*patientsignup.html*/
+
+/* Patient Signup Form */
+.patient-signup {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.patient-signup h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.patient-signup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-signup label {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.patient-signup input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.patient-signup button.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.patient-signup button.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+
+
+
+
+/* login pages */
+
+/* Patient Login Form */
+.patient-login,
+.doctor-login,
+.admin-login {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.patient-login h1,
+.doctor-login h1,
+.admin-login h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.patient-login form,
+.doctor-login form,
+.admin-login form {
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-login label,
+.doctor-login label,
+.admin-login label {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+
+.patient-login input,
+.doctor-login input,
+.admin-login input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.patient-login button.btn,
+.doctor-login button.btn,
+.admin-login button.btn {
+    background-color: #0056b3;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.patient-login button.btn:hover,
+.doctor-login button.btn:hover,
+.admin-login button.btn:hover {
+    background-color: #003d82;
+    transition: background-color 0.3s ease;
+}
+/* Card layout */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.doctor-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.doctor-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.doctor-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.doctor-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.doctor-card .btn:hover {
+    background-color: #d32f2f;
+}
+
+.doctor-card:hover {
+    transform: scale(1.05);
+}
+
+
+
+.appointment-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.appointment-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.appointment-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.appointment-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.appointment-card .btn:nth-child(2) {
+    background-color: #f44336; /* For cancel button */
+}
+
+.appointment-card .btn:hover {
+    background-color: #388e3c;
+}
+
+.appointment-card:hover {
+    transform: scale(1.05);
+}

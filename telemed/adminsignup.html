@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-signup">
+            <h1>Admin Sign Up</h1>
+            <form action="#" method="post" id="adminSignUpForm">
+                
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select role</option>
+                    <option value="admin">Admin</option>
+                    <option value="superadmin">Superadmin</option>
+                </select>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit" class="btn">Sign Up</button>
+
+            </form>
+            <p id="responseMessage"></p> <!-- This is for showing the server's response -->
+
+        </section>
+    </main>
+
+    <script>
+        // Handle form submission with fetch
+        document.getElementById('adminSignUpForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+
+            // Construct the request body
+            const requestBody = {
+                username: username,
+                role: role,
+                password: password
+            };
+
+            try {
+                // Send the POST request to the backend
+                const response = await fetch('http://localhost:3000/admin/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Show a success message
+                    document.getElementById('responseMessage').textContent = result.message;
+                    // Optionally, reset the form
+                    document.getElementById('adminSignUpForm').reset();
+                } else {
+                    // Show an error message if the sign-up fails
+                    document.getElementById('responseMessage').textContent = `Error: ${result.message.sqlMessage}`;
+                    //console.log(result.message)
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').textContent = 'Something went wrong. Please try again later.';
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

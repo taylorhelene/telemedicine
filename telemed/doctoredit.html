@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>s
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            <h1>Edit Details</h1>
+
+            <form id="doctorForm">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" required>
+        
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" required>
+        
+                <label for="phone">Phone Number</label>
+                <input type="number" id="phone" name="phone" required>
+        
+                <label for="specialization">Specialization</label>
+                <input type="text" id="specialization" name="specialization" required>
+
+                <label for="schedule">Schedule</label>
+                <input type="text" id="schedule" name="schedule" required>
+
+                <button type="submit" class="btn">Edit</button>
+            </form>
+            <section class="patient-welcome">
+                <div class="buttons">
+                    <a  class="btn" id="logoutBtn">Logout</a>
+                </div>
+            </section>
+            
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+    
+    <script>
+        const doctorId = localStorage.getItem('doctorId');
+
+        if (!doctorId) {
+            alert('You must be logged in to access this page.');
+            window.location.href = 'doctorlogin.html'; // Redirect to login page if not logged in
+        }
+                
+         // Handle form submission to update doctor details
+         document.getElementById('doctorForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = {
+                first_name: document.getElementById('firstname').value,
+                last_name: document.getElementById('lastname').value,
+                phone: document.getElementById('phone').value,
+                specialization: document.getElementById('specialization').value,
+                schedule: document.getElementById('schedule').value,
+            };
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/doctors/${doctorId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    alert('Doctor details updated successfully!');
+                    // Optionally, redirect or reload the page
+                } else {
+                    alert('Failed to update doctor details.');
+                }
+            } catch (error) {
+                console.error('Error updating doctor details:', error);
+                alert('Failed to update doctor details.');
+            }
+        });
+
+        // Logout button functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.clear(); // Clear localStorage on logout
+            window.location.href = 'doctorlogin.html'; // Redirect to login page
+        });
+
+    </script>
+
+</body>
+</html>

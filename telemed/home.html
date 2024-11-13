@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Website</title>
+    <link rel="stylesheet" href="style.css">
+     <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
+     <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css" type="text/css">
+     <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
+
+
+     <script type="text/javascript">
+
+        //Create an HTML marker and add it to the map.
+        var marker = new atlas.HtmlMarker({
+        color: 'DodgerBlue',
+        text: '10',
+        position:  [35.2589972,0.471555],
+        popup: new atlas.Popup({
+            content: '<div style="padding:10px">Telemed Hospital</div>',
+            pixelOffset: [0, -30]
+        })
+        });
+
+
+       //Create an instance of the map control and set some options.
+         function InitMap()
+         {
+             var map = new atlas.Map('myMap', {
+                 center: [35.2589972,0.471555],
+                 zoom: 12,
+                 language: 'en-US',
+                 authOptions: {
+                     authType: 'subscriptionKey',
+                     subscriptionKey: '1akhIN20Nah8GSGRRIJqb2e3iSNICCYXqnJexRgvKcXPy4Lxw9TcJQQJ99AKACYeBjFnBhOwAAAgAZMP1EX3'
+                 }
+             });
+
+             map.markers.add(marker);
+
+             //Add a click event to toggle the popup.
+            map.events.add('click',marker, () => {
+            marker.togglePopup();
+            });
+  
+
+         }
+     </script>
+
+     <style>
+         html, body {
+             margin: 0;
+         }
+
+         #myMap {
+             height: 80vh;
+             width: 90vw;
+             margin-bottom: 10%;
+         }
+     </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h1>Welcome to Our Hospital</h1>
+            <p>We provide the best healthcare services for our community.</p>
+        </section>
+        <body onload="InitMap()" >
+            <div id="myMap" ></div>
+        </body>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

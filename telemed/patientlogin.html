@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="patient-login">
+            <h1>Patient Login</h1>
+            <form  id="loginForm" >
+                <label for="username">Email</label>
+                <input type='email' id="username" name="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div id="error-message" style="color: red;"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Login failed. Please check your credentials.');
+                }
+
+                const data = await response.json();
+                // Handle successful login, e.g., redirect to another page
+                // Store user details in localStorage
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                window.location.href = 'patient-dashboard.html'; // Redirect to patient dashboard
+
+            } catch (error) {
+                document.getElementById('error-message').innerText = error.message;
+            }
+        });
+    </script>
+
+</body>
+</html>

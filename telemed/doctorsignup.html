@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <ul class="left-navbar">
+                <li><a href="home.html">Telemedicine</a></li>
+            </ul>
+            <ul class="navbar">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="patient.html">Patient</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="doctor-signup">
+            <h1>Doctor Sign Up</h1>
+            <form action="#" method="post" id="doctor-signup-form">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" required>
+
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" required>
+
+                <label for="specialization">Specialization</label>
+                <input type="text" id="specialization" name="specialization" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="number" id="number" name="number" required>
+
+                <label for="schedule">Schedule : For example 'Available Monday, Wednesday, Friday, 9 AM - 3 PM'</label>
+                <input type="text" id="schedule" name="schedule" required>
+
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('doctor-signup-form').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevent the form from submitting in the traditional way
+    
+            const formData = new FormData(this);
+    
+            // Convert the form data into a JSON object
+            const data = {
+                firstname: formData.get('firstname'),
+                lastname: formData.get('lastname'),
+                specialization: formData.get('specialization'),
+                email: formData.get('email'),
+                phone: formData.get('number'),
+                schedule: formData.get('schedule')
+            };
+    
+            try {
+                // Send the POST request to the server
+                const response = await fetch(' http://localhost:3000/doctor/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // We send JSON
+                    },
+                    body: JSON.stringify(data) // Convert data to JSON string
+                });
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);  // Display success message
+                    this.reset();  // Reset the form after successful submission
+                } else {
+                    alert('Error: Failed to register the doctor.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again later.');
+            }
+        });
+    </script>
+    
+
+    <footer>
+        <p>&copy; 2024 Hospital. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
